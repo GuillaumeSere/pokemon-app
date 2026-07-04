@@ -1,83 +1,106 @@
-import React, { useState } from 'react'
 import './PokemonCard.css'
 import pokeball from '../images/pokeballcolor.png'
-import Modal from './Modal'
+import {
+    formatAbilityName,
+    formatHeight,
+    formatPokemonName,
+    formatStatName,
+    formatWeight,
+    getPokemonImage,
+    getPokemonNumber,
+    getPokemonTypes,
+    getPrimaryTypeMeta,
+    getStatPercent,
+    getTypeMeta,
+} from '../utils/pokemon'
 
-function PokemonCard({ id, name, image, type, weight, height, stats, statsName }) {
+function PokemonCard({ pokemon, isActive, onFocus, onOpen }) {
+    const name = formatPokemonName(pokemon.name)
+    const number = getPokemonNumber(pokemon)
+    const artwork = getPokemonImage(pokemon)
+    const primaryType = getPrimaryTypeMeta(pokemon)
+    const types = getPokemonTypes(pokemon)
+    const leadStats = pokemon.stats?.slice(0, 3) || []
+    const firstAbility = pokemon.abilities?.[0]
 
-    const [isShown, setIsShown] = useState(false)
-
-    const [modalIsOpen, setIsModalIsOpen] = useState(false)
-
-    function modalHandler(){
-        setIsModalIsOpen(true)
-    }
-
-    function closeModalHandler(){
-        setIsModalIsOpen(false)
+    function handleKeyDown(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            onOpen(pokemon)
+        }
     }
 
     return (
-        <div className='container'>
-            {isShown && (
-            <div className="show">
-                <div className="stat-container-title">
-                    <img src={image} alt={name} className="image-title" />
-                    <p style={{ width: "100px", color: "black" }}>No. {id}</p>
-                    <p>{name}</p>
-                    <img src={pokeball} className="pokeball-title" alt="pokeball" style={{ width: "50px" }} />
+        <article
+            className={`pokemon-card ${isActive ? 'is-active' : ''}`}
+            style={{
+                '--type-color': primaryType.color,
+                '--type-soft': primaryType.soft,
+                '--type-text': primaryType.text,
+            }}
+            role="button"
+            tabIndex="0"
+            onMouseEnter={() => onFocus(pokemon)}
+            onFocus={() => onFocus(pokemon)}
+            onClick={() => onOpen(pokemon)}
+            onKeyDown={handleKeyDown}
+        >
+            <div className="pokemon-card__topline">
+                <span>No. {number}</span>
+                <img src={pokeball} alt="" aria-hidden="true" />
+            </div>
+
+            <div className="pokemon-card__art">
+                <img src={artwork} alt={name} loading="lazy" />
+            </div>
+
+            <div className="pokemon-card__body">
+                <h3>{name}</h3>
+                <p>{formatAbilityName(firstAbility) || 'Talent inconnu'}</p>
+
+                <div className="pokemon-card__types">
+                    {types.map((type) => {
+                        const meta = getTypeMeta(type)
+
+                        return (
+                            <span
+                                key={type}
+                                style={{
+                                    '--type-color': meta.color,
+                                    '--type-soft': meta.soft,
+                                    '--type-text': meta.text,
+                                }}
+                            >
+                                {meta.label}
+                            </span>
+                        )
+                    })}
                 </div>
-                <img src={image} alt={name} />
-                <div style={{ display: "flex", width: "100%" }}>
-                    <div style={{ background: "#dbdbd9", textAlign: "center" }} className="stats-left">
-                        <p>Type</p>
-                        <p>Height</p>
-                        <p>Weight</p>
+
+                <div className="pokemon-card__metrics">
+                    <div>
+                        <span>Taille</span>
+                        <strong>{formatHeight(pokemon.height)}</strong>
                     </div>
-                    <div style={{ background: "#ffffff" }} className="stats-right">
-                        <p>{type}</p>
-                        <p>{height} 0 cm</p>
-                        <p>{weight} lbs</p>
+                    <div>
+                        <span>Poids</span>
+                        <strong>{formatWeight(pokemon.weight)}</strong>
                     </div>
                 </div>
-                <div className="base-stats">
-                    <div>
-                        {statsName.map((stats) => (
-                            <p className='stats'>{stats}</p>
-                        ))}
-                    </div>
-                    <div>
-                        {stats.map((stats) => (
-                            <p className='stats'>{stats}</p>
-                        ))}
-                    </div>
+
+                <div className="pokemon-card__stats">
+                    {leadStats.map((slot) => (
+                        <div key={slot.stat.name}>
+                            <span>{formatStatName(slot.stat.name)}</span>
+                            <strong>{slot.base_stat}</strong>
+                            <div>
+                                <i style={{ width: `${getStatPercent(slot.base_stat)}%` }} />
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
-            )}
-            <div className="right"
-             onMouseEnter={() => setIsShown(true)}
-             onMouseLeave={() => setIsShown(false)}
-             onClick={modalHandler}
-             >
-                <img src={image} alt={name} style={{ maxHeight: "50px", marginRight: "10px", width: "50px" }} />
-                <p style={{ width: "240px" }}>No. {id}</p>
-                <p>{name}</p>
-                <img src={pokeball} alt="pokeball" style={{marginLeft: "auto", width: "40px"}} />
-            </div>
-            {modalIsOpen && (
-                <Modal 
-                id={id}
-                name={name}
-                image={image}
-                height={height}
-                weight={weight}
-                stats={stats}
-                statsName={statsName}
-                type={type}
-                onClick={closeModalHandler}
-                />
-            )}
-        </div>
+        </article>
     )
 }
 

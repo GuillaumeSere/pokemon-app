@@ -1,5 +1,4 @@
 import Topbar from "./components/Topbar";
-import Bottombar from './components/Bottombar';
 import Pokelist from './components/Pokelist';
 
 function App() {
@@ -7,7 +6,6 @@ function App() {
     <>
     <Topbar />
     <Pokelist />
-    <Bottombar />
     </>
   );
 }

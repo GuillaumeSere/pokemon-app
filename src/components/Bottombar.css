@@ -1,25 +1,140 @@
-.bottom{
-    position: absolute;
-    bottom: 0;
-    height: 50px;
-    width: 100%;
-    background: black;
+.bottom {
+    position: fixed;
+    right: 26px;
+    bottom: 18px;
+    left: 26px;
+    z-index: 40;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    grid-template: 30px;
-    padding-right: 50px;
+    gap: 10px;
+    min-height: 46px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    background: #0f0f12;
+    box-shadow: 0 16px 34px rgba(17, 17, 20, 0.2);
 }
-.bottom-btn{
-    display: flex;
-    grid-template: 15px;
-    color: white;
-    cursor: pointer;
-}
-.bg-circle-white{
-    border-radius: 50%;
-    padding: 0 5px;
-    background: white;
-    color: black;
+
+.bottom-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    min-height: 32px;
+    padding: 0 8px 0 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: #ffffff;
+    font-size: 0.82rem;
     font-weight: 800;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 160ms ease, color 160ms ease, opacity 160ms ease, transform 160ms ease;
+}
+
+.bottom-btn__label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bottom-btn__label--compact {
+    display: none;
+}
+
+.bottom-btn:hover,
+.bottom-btn:focus-visible,
+.bottom-btn.is-active {
+    background: rgba(255, 255, 255, 0.1);
+    outline: none;
+    transform: translateY(-1px);
+}
+
+.bottom-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+    transform: none;
+}
+
+.bg-circle-white {
+    display: inline-grid;
+    min-width: 25px;
+    height: 25px;
+    padding: 0 6px;
+    place-items: center;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #111114;
+    font-size: 0.75rem;
+    font-weight: 900;
+}
+
+@media (max-width: 680px) {
+    .bottom {
+        right: 12px;
+        bottom: 12px;
+        left: 12px;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 6px;
+        min-height: 64px;
+        padding: 8px;
+        overflow: visible;
+    }
+
+    .bottom-btn {
+        justify-content: center;
+        flex-direction: column;
+        gap: 4px;
+        width: 100%;
+        min-height: 48px;
+        padding: 5px 4px;
+        border-radius: 8px;
+        font-size: 0.68rem;
+        line-height: 1.1;
+        text-align: center;
+    }
+
+    .bottom-btn__label {
+        display: block;
+        width: 100%;
+        white-space: nowrap;
+    }
+
+    .bottom-btn__label--full {
+        display: none;
+    }
+
+    .bottom-btn__label--compact {
+        display: block;
+    }
+
+    .bg-circle-white {
+        min-width: 24px;
+        height: 24px;
+        padding: 0 5px;
+        font-size: 0.68rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .bottom {
+        right: 8px;
+        left: 8px;
+        gap: 4px;
+        padding: 6px;
+    }
+
+    .bottom-btn {
+        min-height: 46px;
+        font-size: 0.62rem;
+    }
+
+    .bg-circle-white {
+        min-width: 22px;
+        height: 22px;
+        font-size: 0.64rem;
+    }
 }

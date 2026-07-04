@@ -1,35 +1,25 @@
 import React from 'react'
 import './Bottombar.css'
 
-const Bottombar = () => {
+const Bottombar = ({ actions = [], onAction }) => {
   return (
-    <div className='bottom'>
-      <div className="bottom-btn">
-        <p className="bg-circle-white">A</p>&nbsp;
-        <p>See Details</p>
-      </div>
-
-      <div className="bottom-btn">
-        <p className="bg-circle-white">X</p>&nbsp;
-        <p>Habitat</p>
-      </div>
-
-      <div className="bottom-btn">
-        <p className="bg-circle-white">Y</p>&nbsp;
-        <p>Sort</p>
-      </div>
-
-      <div className="bottom-btn">
-        <p className="bg-circle-white">+</p>&nbsp;
-        <p>See Evaluation</p>
-      </div>
-
-      <div className="bottom-btn">
-        <p className="bg-circle-white">B</p>&nbsp;
-        <p>Back</p>
-      </div>
- 
-    </div>
+    <footer className='bottom'>
+      {actions.map(({ action, active, disabled, key, label, mobileLabel }) => (
+        <button
+          className={`bottom-btn ${active ? 'is-active' : ''}`}
+          disabled={disabled}
+          key={action}
+          title={label}
+          type="button"
+          aria-label={label}
+          onClick={() => onAction(action)}
+        >
+          <span className="bg-circle-white">{key}</span>
+          <span className="bottom-btn__label bottom-btn__label--full">{label}</span>
+          <span className="bottom-btn__label bottom-btn__label--compact">{mobileLabel || label}</span>
+        </button>
+      ))}
+    </footer>
   )
 }
 
